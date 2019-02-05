@@ -76,6 +76,7 @@ RCT_EXPORT_METHOD(getUserProfile:(RCTPromiseResolveBlock)resolve
             reject(nil, nil, error);
         } else
         {
+            
             resolve([self parseProfile: profile]);
         }
     }];
@@ -97,7 +98,7 @@ RCT_EXPORT_METHOD(getUserProfile:(RCTPromiseResolveBlock)resolve
 {
     LineSDKLogin *shared = [LineSDKLogin sharedInstance];
     
-    if ([shared isAuthorized])
+    if (false)
     {
         [self getUserProfile:loginResolver
                     rejecter:loginRejecter];
@@ -135,7 +136,13 @@ RCT_EXPORT_METHOD(getUserProfile:(RCTPromiseResolveBlock)resolve
         NSMutableDictionary *result = [NSMutableDictionary new];
         
         NSDictionary *parsedAccessToken = [self parseAccessToken:[credential accessToken]];
+//        NSDictionary *parsedAccessToken = [self parseAccessToken:[credential accessToken]];
+        LineSDKJSONWebToken *jsonWebToken =[credential IDToken];
+        
         NSDictionary *parsedProfile = [self parseProfile:profile];
+        [parsedProfile setValue:jsonWebToken.email forKey:@"email"];
+        
+        
         
         [result setValue:parsedAccessToken forKey:@"accessToken"];
         [result setValue:parsedProfile forKey:@"profile"];
